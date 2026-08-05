@@ -56,10 +56,36 @@ from estoque where quantidade_disponivel<20;
 select id_pagamento,status_pagamento
 from pagamento where status_pagamento='CANCELADO';
 
-
-
 -- ordenacao (order by)
--- order by,asc,desc,limit
+--  1)produtos do mais caro para o mais barato
+select nome,preco
+from produto
+order by preco desc;
+
+--  2)produtos do mais barato para o mais caro
+select nome,preco
+from produto
+order by preco asc;
+
+--  3)clientes em ordem alfabetica
+select nome,id_cliente
+from cliente
+order by nome;
+
+--  4)pedidos mais recentes
+select id_pedido,data_pedido
+from pedido
+order by data_pedido desc;
+--  5)menor estoque primeiro
+select quantidade_disponivel,id_produto
+from estoque
+order by quantidade_disponivel;
+--  6)top 5 produtos mais caros
+select nome,preco
+from produto
+order by preco desc
+limit 5;
+T
 
 -- funcoes de agregacao
 -- count,sum,avg,min,max
