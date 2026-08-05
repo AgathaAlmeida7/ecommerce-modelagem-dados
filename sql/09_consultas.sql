@@ -9,7 +9,6 @@
 -- QUAIS DADOS DE FATO EXISTEM NA TABELA
 -- 7 consultas para cada uma das 7 tabelas
 
-
 -- =====================================================
 -- CONSULTA 01
 -- Listar todos os clientes cadastrados
@@ -28,27 +27,36 @@ select * from itens_pedido;
 
 select * from pagamento;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -- filtros (where)
--- where,and,or, like
+-- QUAIS PRODUTOS CUSTAM MAIS DE 1K?
+select nome,descricao
+from produto where preco>1000;
+
+-- QUAIS PEDIDOS AINDA ESTAO PENDENTES?
+select id_pedido,status_pedido
+from pedido where status_pedido='PENDENTE';
+
+-- QUAIS PAGAMENTOS JA FORAM CONCLUIDOS?
+select id_pagamento,status_pagamento
+from pagamento where status_pagamento='PAGO';
+
+-- QUAIS CLIENTES MORAM EM RECIFE?
+select id_cliente,nome,endereco
+from cliente where endereco='Recife-PE';
+
+-- QUAIS PRODUTOS PERTECENCEM A CATEGORIA INFORMATICA?
+select id_produto,nome,id_categoria
+from produto where id_categoria=2; 
+
+-- QUAIS PRODUTOS POSSUEM MENOS DE 20 UNIDADES EM ESTOQUE?
+select id_produto,quantidade_disponivel
+from estoque where quantidade_disponivel<20;
+
+-- QUAIS PEDIDOS TIVERAM PAGAMENTO CANCELADO?
+select id_pagamento,status_pagamento
+from pagamento where status_pagamento='CANCELADO';
+
+
 
 -- ordenacao (order by)
 -- order by,asc,desc,limit
