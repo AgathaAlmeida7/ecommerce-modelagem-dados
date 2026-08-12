@@ -89,9 +89,45 @@ T
 
 -- funcoes de agregacao
 -- count,sum,avg,min,max
+-- consultas que resumem informacoes
+-- tranformando varios registros em uma informacao unica de analise
+-- 8 CONSULTAS SERAO FEITAS
+
+-- 1) QUANTIDADES TOTAL DE CLIENTES CADASTRADOS
+select count(*)from cliente;
+-- se for algo especifico o nome da coluna entra dentro do parenteses do count
+
+-- 2) QUANTIDADES TOTAL DE PRODUTOS CADASTRADOS
+select count(*)from produto;
+
+
+-- 3) VALOR TOTAL DE  PRODUTOS  DISPONIVEIS EM ESTOQUE
+select sum(quantidade_disponivel)from estoque;
+
+
+-- 4) MEDIA DE PREÇOS DOS PRODUTOS
+select avg(preco)
+from produto;
+-- 5) PRODUTO MAIS CARO DO CATALOGO
+select max(preco)
+from produto;
+-- 6) PRODUTO MAIS BARATO DO CATALOGO
+select min(preco)
+from produto;
+-- 7) QUANTIDADE TOTAL DE PRODUTOS REALIZADOS
+select count(*)
+-- seria botar o nome do produto para receber a quantidade?
+from produto; 
+-- 8) VALOR TOTAL RECEBIDO EM PAGAMENTOS CONCLUIDOS
+select sum(valor)-- MAIS OU MENOS CERTO⚠️
+from pagamento where status_pagamento= 'PAGO';
+
 
 -- agrupamentos(group by)
 -- group by,having
+
+
+
 
 -- relacionamentos (join)
 -- começo da uniao das tabelas
