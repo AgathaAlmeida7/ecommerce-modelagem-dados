@@ -126,12 +126,47 @@ from pagamento where status_pagamento= 'PAGO';
 -- agrupamentos(group by)
 -- group by,having
 
+-- > group by, divide os dados em grupos e permite fazer agregacoes dentro de cada gurpo,having ele filtra esses grupos ja formados
 
+
+-- 1) QUANTIDADE DE  PRODUTOS  QUE SE TEM POR CATEGORIAS
+select id_categoria,count(id_produto)
+from produto
+group by id_categoria;
+
+-- 2) QUANTIDADE DE PEDIDOS POR STATUS
+select status_pedido,count(*)
+from pedido
+group by status_pedido;
+
+-- 3) QUANTIDADE DE PAGAMENTOS POR STATUS
+select status_pagamento,count(*)
+from pagamento
+group by status_pagamento;
+
+-- 4) VALOR TOTAL DOS PAGAMENTOS POR STATUS
+select status_pagamento,sum(valor)
+from pagamento
+group by status_pagamento;
+
+-- 5) PREÇO MEDIO DOS PRODUTOS POR CATEGORIA
+select id_categoria,avg(preco)
+from produto
+group by id_categoria;
+-- 6) MAIOR PREÇO POR CATEGORIA
+select id_categoria,max(preco)
+from produto
+group by id_categoria;
+
+-- 7) CATEGORIAS COM MAIS DE 3 PRODUTOS
+SELECT id_categoria, COUNT(*)
+FROM produto
+GROUP BY id_categoria
+HAVING COUNT(*) > 3;
 
 
 -- relacionamentos (join)
--- começo da uniao das tabelas
--- enxergando o bd como um todo
+
 
 
 -- consultas gerencias
