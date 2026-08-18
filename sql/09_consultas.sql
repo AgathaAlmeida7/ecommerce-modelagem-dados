@@ -266,16 +266,86 @@ INNER JOIN pagamento
 
       
 -- consultas gerencias
--- consultas que  um gestor realmente iria pedir
--- qual cliente faz mais pedido?
--- qual categoria possui mais produtos?
--- qual produto apareceu em mais pedidos?
--- qual o faturamento total?
--- quanto cada cliente gastou?
--- quais pedidos  ainda estao pendentes?
--- quais pagamentos estao cancelados?
--- quantos produtos existem por categorias?
--- quais clientes nunca realizaram pedidow
--- ver como interpretar as tabelas que possuem relacao direta adequada para responder aperguntar e ir para o join e inner join
+-- BUSCANDO INFORMACOES PARA RESPONDER PERGUNTAS DE NEGOCIOS
+
+-- 1) QUAIS CLIENTES POSSUEM MAIOR QUANTIDADE DE PEDIDOS?
+SELECT cliente.id_cliente,
+       cliente.nome,
+       COUNT(pedido.id_pedido) AS quantidade_pedidos
+FROM cliente
+INNER JOIN pedido
+    ON cliente.id_cliente = pedido.id_cliente
+GROUP BY cliente.id_cliente, cliente.nome
+ORDER BY quantidade_pedidos DESC;
+
+-- 2) IDENTIFICAR QUAIS PRODUTOS POSSUEM MAIOR QUANTIDADE VENDIDA?
+SELECT produto.id_produto,
+       produto.nome,
+       SUM(item_pedido.quantidade) AS quantidade_vendida
+FROM produto
+INNER JOIN item_pedido
+    ON produto.id_produto = item_pedido.id_produto
+GROUP BY produto.id_produto, produto.nome
+ORDER BY quantidade_vendida DESC;
 
 
+-- 3) QUANTO DE VALOR EM VENDAS CADA PRODUTO REPRESENTA?
+SELECT produto.id_produto,
+       produto.nome,
+       SUM(produto.preco * item_pedido.quantidade) AS valor_vendas
+FROM produto
+INNER JOIN item_pedido
+    ON produto.id_produto = item_pedido.id_produto
+GROUP BY produto.id_produto, produto.nome
+ORDER BY valor_vendas DESC;
+
+-- 4) QUAL CATEGORIA GERA MAIOR VALOR EM VENDAS?
+SELECT categoria.id_categoria,
+       categoria.nome_categoria,
+       SUM(produto.preco * item_pedido.quantidade) AS valor_vendas
+FROM categoria
+
+INNER JOIN produto
+    ON categoria.id_categoria = produto.id_categoria
+
+INNER JOIN item_pedido
+    ON produto.id_produto = item_pedido.id_produto
+
+GROUP BY categoria.id_categoria, categoria.nome_categoria
+ORDER BY valor_vendas DESC;
+-- 5) QUANTO DINHEIRO ESTA ASSOCIADO A CADA SITUACAO DE PAGAMENTOS?
+SELECT status_pagamento,
+       SUM(valor) AS valor_total
+FROM pagamento
+GROUP BY status_pagamento
+ORDER BY valor_total DESC;
+-- 6) IDENTIFICAR PRODUTOS QUE PRECISAM DE ATENCAO NO ESTOQUE
+SELECT produto.id_produto,
+       produto.nome,
+       estoque.quantidade_disponivel
+FROM produto
+INNER JOIN estoque
+    ON produto.id_produto = estoque.id_produto
+WHERE estoque.quantidade_disponivel < 20
+ORDER BY estoque.quantidade_disponivel ASC;
+-- 7) IDENTIFICAR OS CLIENTES QUE REPRESENTAM MAIOR VOLUME DE COMPRAS
+SELECT cliente.id_cliente,
+       cliente.nome,
+       SUM(produto.preco * item_pedido.quantidade) AS valor_total_compras
+FROM cliente
+INNER JOIN pedido
+    ON cliente.id_cliente = pedido.id_cliente
+INNER JOIN item_pedido
+    ON pedido.id_pedido = item_pedido.id_pedido
+INNER JOIN produto
+    ON item_pedido.id_produto = produto.id_produto
+GROUP BY cliente.id_cliente, cliente.nome
+ORDER BY valor_total_compras DESC;
+-- 8) RESUMO  GERAL DO E-COMMERCE, OBTER INDICADORES GERAIS(TOTAL DE: CLIENTES,PRODUTOS,PEDIDOS,VALOR TOTAL RECEBIDO)
+SELECT
+    (SELECT COUNT(*) FROM cliente) AS total_clientes,
+    (SELECT COUNT(*) FROM produto) AS total_produtos,
+    (SELECT COUNT(*) FROM pedido) AS total_pedidos,
+    (SELECT SUM(valor)
+     FROM pagamento
+     WHERE status_pagamento = 'PAGO') AS valor_total_recebido;
