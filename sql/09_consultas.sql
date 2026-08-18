@@ -166,9 +166,105 @@ HAVING COUNT(*) > 3;
 
 
 -- relacionamentos (join)
+-- combinando dados de duas ou mais tabelas atraves de uma relacao entre elas
+-- as informacoes que a pergunta quer estao em mais de uma tabela?
+
+-- 8 CONSULTAS DE RELACIONAMENTO COM O JOIN
+
+-- 1) PRODUTOS + CATEGORIAS
+-- QUAIS PRODUTOS PERTENCEM A CADA CATEGORIA?
+select produto.id_produto,
+       produto.nome,
+       categoria.id_categoria,
+       categoria.nome_categoria
+from produto
+inner join categoria
+      on produto.id_categoria=categoria.id_categoria;
+
+-- 2) PEDIDOS + CLIENTES 
+-- QUAIS CLIENTES REALIZARAM QUAIS PEDIDOS?
+select pedido.id_pedido,
+       cliente.id_cliente,
+       cliente.nome
+from pedido
+inner join cliente
+      on pedido.id_cliente=cliente.id_cliente;
 
 
+-- 3)PEDIDOS + PAGAMENTOS 
+-- QUAIS PEDIDOS POSSUEM QUAIS PAGAMENTOS E SEUS RESPECTIVOS STATUS?
 
+select pagamento.id_pedido,
+       pedido.status_pedido,
+       pagamento.status_pagamento
+from pedido
+inner join pagamento 
+      on pagamento.id_pedido=pedido.id_pedido;
+
+-- 4) PROODUTOS + ESTOQUE
+-- QUAL PRODUTO POSSUI DETERMINADA QUANTIDADE DISPONIVEL EM ESTOQUE?
+select produto.id_produto,
+       estoque.id_estoque,
+       estoque.quantidade_disponivel
+from produto
+inner join estoque
+      on produto.id_produto=estoque.id_produto;
+
+-- 5) PRODUTOS + CATEGORIAS + PREÇOS
+-- QUAIS SAO  OS PRODUTOS DE CADA CATEGORIA E SEUS RESPECTIVOS PREÇOS?
+select produto.id_produto,
+       categoria.id_categoria,
+       produto.preco
+from produto
+inner join categoria 
+      on produto.id_categoria=categoria.id_categoria;
+      
+-- 6) PEDIDOS + CLIENTES + PAGAMENTOS
+-- QUAIS CLIENTES FIZERAM PEDIDOS E QUALÉ O STATUS DO PAGAMENTO DESSES PEDIDOS?
+select  pedido.id_cliente,
+        pedido.id_pedido,
+        pagamento.status_pagamento,
+from pedido 
+inner join cliente
+      on pedido.id_cliente=cliente.id_cliente
+inner join pagamento 
+      on pedido.id_pedido=pagamento.id_pedido;
+
+-- 7)  PEDIDOS + ITENS + PRODUTOS
+-- QUAIS PRODUTOS FORAM INCLUIDOS EM CADA PEDIDO?
+select pedido.id_pedido,
+       produto.id_produto,
+       produto.nome
+from pedido
+inner join item_pedido
+      on pedido.id_pedido=item_pedido.id_pedido
+inner join produto
+      on item_pedido.id_produto=produto.id_produto;
+
+-- 8) PEDIDO COMPLETO
+-- QUAIS PRODUTOS FORAM COMPRADOS POR CADA CLIENTE, EM QUAL PEDIDO, COM QUAL QUANTIDADE E QUAL FOI O PAGAMENTO?
+
+SELECT cliente.id_cliente,
+       pedido.id_pedido,
+       produto.id_produto,
+       produto.nome,
+       item_pedido.quantidade,
+       pagamento.status_pagamento
+FROM pedido
+
+INNER JOIN cliente
+    ON pedido.id_cliente = cliente.id_cliente
+
+INNER JOIN item_pedido
+    ON pedido.id_pedido = item_pedido.id_pedido
+
+INNER JOIN produto
+    ON item_pedido.id_produto = produto.id_produto
+
+INNER JOIN pagamento
+    ON pedido.id_pedido = pagamento.id_pedido;
+
+      
 -- consultas gerencias
 -- consultas que  um gestor realmente iria pedir
 -- qual cliente faz mais pedido?
@@ -180,3 +276,6 @@ HAVING COUNT(*) > 3;
 -- quais pagamentos estao cancelados?
 -- quantos produtos existem por categorias?
 -- quais clientes nunca realizaram pedidow
+-- ver como interpretar as tabelas que possuem relacao direta adequada para responder aperguntar e ir para o join e inner join
+
+
